@@ -1,7 +1,7 @@
-import { config } from '@/config';
-import { artistsRouter } from '@/routers/artists';
 import express from 'express';
 import mongoose from 'mongoose';
+import { config } from './config';
+import { artistsRouter } from './routers/artists';
 
 const app = express();
 const port = config.port;
