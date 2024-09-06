@@ -30,7 +30,14 @@ trackHistoryRouter.post('/', async (req, res, next) => {
       return res.status(401).send({ error: 'Wrong token' });
     }
 
-    const track = await Track.findOne({ _id: req.body.track }).populate('album', 'name artist');
+    const track = await Track.findOne({ _id: req.body.track }).populate({
+      path: 'album',
+      select: 'name artist',
+      populate: {
+        path: 'artist',
+        select: 'name',
+      },
+    });
 
     if (!track) {
       return res.status(400).send({ error: 'Track not found' });
