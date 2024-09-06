@@ -26,16 +26,20 @@ usersRouter.post('/', async (req, res, next) => {
 
 usersRouter.post('/sessions', async (req, res, next) => {
   try {
+    if (!req.body.username || !req.body.password) {
+      return res.status(400).send({ error: 'Username and password are required' });
+    }
+
     const user = await User.findOne({ username: req.body.username });
 
     if (!user) {
-      return res.status(400).send('Username not found');
+      return res.status(401).send({ error: 'Username not found' });
     }
 
     const isMatch = await bcrypt.compare(req.body.password, user.password);
 
     if (!isMatch) {
-      return res.status(400).send('Username or password is wrong');
+      return res.status(401).send({ error: 'Username or password is wrong' });
     }
 
     user.token = randomUUID();

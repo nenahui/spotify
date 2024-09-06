@@ -14,6 +14,10 @@ trackHistoryRouter.post('/', async (req, res, next) => {
       return res.status(401).send({ error: 'Header "Authorization" not found' });
     }
 
+    if (!req.body.track) {
+      return res.status(400).send({ error: 'Track is required' });
+    }
+
     const [_bearer, token] = headerValue.split(' ');
 
     if (!token) {
@@ -26,10 +30,10 @@ trackHistoryRouter.post('/', async (req, res, next) => {
       return res.status(401).send({ error: 'Wrong token' });
     }
 
-    const track = await Track.findOne({ _id: req.body.track });
+    const track = await Track.findOne({ _id: req.body.track }).populate('album', 'name artist');
 
     if (!track) {
-      return res.status(401).send({ error: 'Track not found' });
+      return res.status(400).send({ error: 'Track not found' });
     }
 
     const trackHistory = new TrackHistory({
