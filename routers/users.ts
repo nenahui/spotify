@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import express from 'express';
 import mongoose from 'mongoose';
 import { randomUUID } from 'node:crypto';
@@ -19,6 +20,29 @@ usersRouter.post('/', async (req, res, next) => {
     if (error instanceof mongoose.Error.ValidationError) {
       return res.status(400).send(error);
     }
+    next(error);
+  }
+});
+
+usersRouter.post('/sessions', async (req, res, next) => {
+  try {
+    const user = await User.findOne({ username: req.body.username });
+
+    if (!user) {
+      return res.status(400).send('Username not found');
+    }
+
+    const isMatch = await bcrypt.compare(req.body.password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).send('Username or password is wrong');
+    }
+
+    user.token = randomUUID();
+    await user.save();
+
+    return res.send(user);
+  } catch (error) {
     next(error);
   }
 });
