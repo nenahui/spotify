@@ -4,12 +4,13 @@ import { fetchArtists } from '@/entities/artist/model/artistsThunks';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { Loader } from '@/shared/ui/loader';
 import React, { useEffect } from 'react';
+import { Outlet, useParams } from 'react-router-dom';
 
 export const Home: React.FC = () => {
+  const { artistId } = useParams();
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtists);
   const isArtistsFetching = useAppSelector(selectArtistsFetching);
-  const selected = true;
 
   useEffect(() => {
     dispatch(fetchArtists());
@@ -27,23 +28,22 @@ export const Home: React.FC = () => {
             {artists.map((artist) => (
               <Artist artist={artist} key={artist._id} />
             ))}
-            {artists.map((artist) => (
-              <Artist artist={artist} key={artist._id} />
-            ))}
           </div>
         </section>
 
-        <section className={'w-full border-r relative px-6'}>
-          {!selected ? (
-            <small className={'absolute top-1/2 -translate-y-2/4 text-center w-full text-muted-foreground'}>
+        {!artistId ? (
+          <div className={'relative w-full'}>
+            <small
+              className={
+                'absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center text-muted-foreground'
+              }
+            >
               Please select an artist.
             </small>
-          ) : (
-            <div>
-              <h2 className={'text-3xl'}>Ulukmanapo</h2>
-            </div>
-          )}
-        </section>
+          </div>
+        ) : (
+          <Outlet />
+        )}
       </div>
     </div>
   );

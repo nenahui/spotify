@@ -1,0 +1,23 @@
+.card {
+	@apply cursor-pointer relative p-2 text-white bg-black rounded-xl overflow-hidden flex gap-2 bg-center bg-cover bg-[url('http://localhost:8000/fixtures/macan.png')];
+}
+
+.blur {
+	@apply absolute inset-0 bg-black/50 w-[5000px] rounded-xl backdrop-blur-md;
+}
+
+.info {
+	@apply relative z-10 flex gap-2 items-center;
+}
+
+.img {
+	@apply size-16 rounded-xl border dark;
+}
+
+.artistTitle {
+	@apply text-lg ml-0.5;
+}
+
+.release {
+	@apply max-w-max px-[10px] text-gray-300 h-6 text-sm flex items-center bg-gray-50/10 rounded-full;
+}
