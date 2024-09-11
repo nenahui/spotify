@@ -65,3 +65,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+* {
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  overflow: hidden;
+}

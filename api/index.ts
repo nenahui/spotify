@@ -6,11 +6,14 @@ import { artistsRouter } from './routers/artists';
 import { trackHistoryRouter } from './routers/trackHistories';
 import { tracksRouter } from './routers/tracks';
 import { usersRouter } from './routers/users';
+import cors from 'cors';
 
 const app = express();
 const port = config.port;
 
 app.use(express.json());
+app.use(cors(config.corsOptions));
+app.use(express.static('public'));
 app.use('/artists', artistsRouter);
 app.use('/albums', albumsRouter);
 app.use('/tracks', tracksRouter);

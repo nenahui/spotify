@@ -1,8 +1,8 @@
 export interface Artst {
   _id: string;
   name: string;
-  picture: string | null;
-  information: string | null;
+  picture: string;
+  information: string;
 }
 
 export interface ArtistMutation {
