@@ -1,5 +1,5 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { Album } from '../models/Album';
 import { imagesUpload } from '../multer';
 import type { AlbumMutation } from '../types';
@@ -24,6 +24,10 @@ albumsRouter.get('/', async (req, res, next) => {
 albumsRouter.get('/:id', async (req, res, next) => {
   try {
     const id = req.params.id;
+
+    if (!Types.ObjectId.isValid(id)) {
+      return res.status(400).send({ error: 'Invalid album ID' });
+    }
 
     const album = await Album.findById(id).populate('artist', 'name picture information');
 

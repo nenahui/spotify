@@ -22,7 +22,7 @@ const AlbumSchema = new Schema({
     required: true,
   },
   release: {
-    type: String,
+    type: Number,
     required: true,
   },
   cover: String,

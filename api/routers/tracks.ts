@@ -1,5 +1,6 @@
 import express from 'express';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
+import { Album } from '../models/Album';
 import { Track } from '../models/Track';
 import type { TrackMutation } from '../types';
 
@@ -22,13 +23,22 @@ tracksRouter.get('/', async (req, res, next) => {
 
 tracksRouter.post('/', async (req, res, next) => {
   try {
+    if (!Types.ObjectId.isValid(req.body.album)) {
+      return res.status(400).send({ error: 'Incorrect album ID or you did not pass the album ID' });
+    }
+
     const trackMutation: TrackMutation = {
       name: req.body.name,
       album: req.body.album,
       duration: req.body.duration,
     };
 
-    const track = new Track(trackMutation);
+    const trackNumber = await Track.find({ album: req.body.album });
+
+    const track = new Track({
+      ...trackMutation,
+      number: trackNumber.length,
+    });
     await track.save();
 
     return res.send(track);

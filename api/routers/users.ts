@@ -8,6 +8,12 @@ export const usersRouter = express.Router();
 
 usersRouter.post('/', async (req, res, next) => {
   try {
+    const isBusy = await User.findOne({ username: req.body.username });
+
+    if (isBusy) {
+      return res.status(401).send({ error: 'Username already exists' });
+    }
+
     const user = new User({
       username: req.body.username,
       password: req.body.password,
