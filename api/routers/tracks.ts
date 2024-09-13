@@ -1,6 +1,5 @@
 import express from 'express';
 import mongoose, { Types } from 'mongoose';
-import { Album } from '../models/Album';
 import { Track } from '../models/Track';
 import type { TrackMutation } from '../types';
 
@@ -13,6 +12,7 @@ tracksRouter.get('/', async (req, res, next) => {
 
     if (albumId) {
       tracks = await Track.find({ album: albumId });
+      tracks.sort((a, b) => a.number - b.number);
     }
 
     return res.send(tracks);
