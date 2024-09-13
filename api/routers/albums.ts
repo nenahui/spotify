@@ -12,7 +12,7 @@ albumsRouter.get('/', async (req, res, next) => {
     let albums = await Album.find();
 
     if (artistId) {
-      albums = await Album.find({ artist: artistId });
+      albums = await Album.find({ artist: artistId }).populate('artist', 'name');
     }
 
     albums.sort((a, b) => b.release - a.release);

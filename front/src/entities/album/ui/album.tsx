@@ -1,6 +1,7 @@
 import type { IAlbum } from '@/shared/types';
 import { Card } from '@/shared/ui/card';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styles from './album.module.scss';
 
 interface Props {
@@ -9,17 +10,19 @@ interface Props {
 
 export const Album: React.FC<Props> = ({ album }) => {
   return (
-    <Card>
-      <div className={styles.card}>
-        <div className={styles.blur} />
-        <div className={styles.info}>
-          <img src={`http://localhost:8000/${album.cover}`} className={styles.img} alt='album' />
-          <div>
-            <h4 className={styles.artistTitle}>{album.name}</h4>
-            <span className={styles.release}>Release {album.release}</span>
+    <Link to={`/album/${album._id}`}>
+      <Card>
+        <div className={styles.card}>
+          <div className={styles.blur} />
+          <div className={styles.info}>
+            <img src={`http://localhost:8000/${album.cover}`} className={styles.img} alt='album' />
+            <div>
+              <h4 className={styles.artistTitle}>{album.name}</h4>
+              <span className={styles.release}>Release {album.release}</span>
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   );
 };

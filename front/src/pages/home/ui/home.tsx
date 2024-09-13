@@ -9,6 +9,7 @@ import styles from './home.module.scss';
 
 export const Home: React.FC = () => {
   const { artistId } = useParams();
+  const { albumId } = useParams();
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectArtists);
   const isArtistsFetching = useAppSelector(selectArtistsFetching);
@@ -35,7 +36,7 @@ export const Home: React.FC = () => {
           </div>
         </section>
 
-        {!artistId ? (
+        {!artistId && !albumId ? (
           <div className={styles.relativeBlock}>
             <small className={styles.smallText}>Please select an artist.</small>
           </div>
