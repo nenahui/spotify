@@ -1,0 +1,23 @@
+.containerBlock {
+  @apply container mx-auto;
+}
+
+.flexContainer {
+  @apply flex;
+}
+
+.sectionBlock {
+  @apply max-w-max border-x px-5;
+}
+
+.artistList {
+  @apply flex flex-col max-h-screen gap-0.5 overflow-hidden overflow-y-scroll;
+}
+
+.relativeBlock {
+  @apply relative w-full;
+}
+
+.smallText {
+  @apply absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center text-muted-foreground;
+}

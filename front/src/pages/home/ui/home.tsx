@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { Loader } from '@/shared/ui/loader';
 import React, { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
+import styles from './home.module.scss';
 
 export const Home: React.FC = () => {
   const { artistId } = useParams();
@@ -21,10 +22,13 @@ export const Home: React.FC = () => {
   }
 
   return (
-    <div className={'container mx-auto'}>
-      <div className={'flex'}>
-        <section className={'max-w-max border-x px-5'}>
-          <div className={'flex flex-col max-h-screen gap-0.5 overflow-hidden overflow-y-scroll'}>
+    <div className={styles.containerBlock}>
+      <div className={styles.flexContainer}>
+        <section className={styles.sectionBlock}>
+          <div className={styles.artistList}>
+            {artists.map((artist) => (
+              <Artist artist={artist} key={artist._id} />
+            ))}
             {artists.map((artist) => (
               <Artist artist={artist} key={artist._id} />
             ))}
@@ -32,14 +36,8 @@ export const Home: React.FC = () => {
         </section>
 
         {!artistId ? (
-          <div className={'relative w-full'}>
-            <small
-              className={
-                'absolute top-1/2 left-1/2 -translate-y-2/4 -translate-x-2/4 text-center text-muted-foreground'
-              }
-            >
-              Please select an artist.
-            </small>
+          <div className={styles.relativeBlock}>
+            <small className={styles.smallText}>Please select an artist.</small>
           </div>
         ) : (
           <Outlet />
