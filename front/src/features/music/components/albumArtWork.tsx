@@ -11,24 +11,17 @@ import {
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
 import React from 'react';
-import { Album } from '../data/albums';
+import { Album } from '@/types';
 import { playlists } from '../data/playlists';
 
-interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   album: Album;
   aspectRatio?: 'portrait' | 'square';
   width?: number;
   height?: number;
 }
 
-export const AlbumArtwork = ({
-  album,
-  aspectRatio = 'portrait',
-  width,
-  height,
-  className,
-  ...props
-}: AlbumArtworkProps) => {
+export const AlbumArtwork = ({ album, aspectRatio = 'portrait', width, height, className, ...props }: Props) => {
   return (
     <div className={cn('space-y-3', className)} {...props}>
       <ContextMenu>
