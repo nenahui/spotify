@@ -86,7 +86,7 @@ export function Sidebar({ className, playlists }: SidebarProps) {
               Songs
             </Button>
             <Link to={'/artists'} className={'block'}>
-              <Button variant={active === 'artists' ? 'secondary' : 'ghost'} className='w-full justify-start'>
+              <Button variant={active.includes('artists') ? 'secondary' : 'ghost'} className='w-full justify-start'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   viewBox='0 0 24 24'
