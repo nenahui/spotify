@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Separator } from '@/components/ui/separator';
 import { AlbumCard } from '@/features/music/components/albumCard';
+import { BackButton } from '@/features/music/components/backButton';
 import { selectMusicArtist, selectMusicArtistsAlbums } from '@/features/musicSlice';
 import { fetchArtist, fetchArtistAlbums } from '@/features/musicThunks';
 import React, { useEffect } from 'react';
@@ -28,6 +29,7 @@ export const Album: React.FC = () => {
 
   return (
     <div className={'px-4 py-6 lg:px-8'}>
+      <BackButton className={'mb-2'} />
       <div className='flex gap-3 justify-between mb-4'>
         <img
           className={'rounded-md max-w-xs object-cover size-32 aspect-square'}
@@ -48,7 +50,7 @@ export const Album: React.FC = () => {
       </div>
       <Separator className={'my-4'} />
 
-      <div className={'flex flex-col gap-2'}>
+      <div className={'grid grid-cols-4 gap-4'}>
         {albums.map((album) => (
           <AlbumCard album={album} key={album._id} />
         ))}

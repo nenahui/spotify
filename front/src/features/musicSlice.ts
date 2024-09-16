@@ -1,11 +1,14 @@
-import { fetchArtist, fetchArtistAlbums, fetchArtists } from '@/features/musicThunks';
-import type { Album, Artist } from '@/types';
+import { fetchAlbum, fetchArtist, fetchArtistAlbums, fetchArtists, fetchTracks } from '@/features/musicThunks';
+import type { Album, Artist, OneAlbum, Track } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface MusicState {
   artists: Artist[];
   albums: Album[];
   artist: Artist | null;
+  tracks: Track[];
+  album: OneAlbum | null;
+  isTracksFetching: boolean;
   isArtistsFetching: boolean;
   isArtistsAlbumsFetching: boolean;
 }
@@ -14,6 +17,9 @@ const initialState: MusicState = {
   artists: [],
   albums: [],
   artist: null,
+  tracks: [],
+  album: null,
+  isTracksFetching: false,
   isArtistsFetching: false,
   isArtistsAlbumsFetching: false,
 };
@@ -58,14 +64,48 @@ export const musicSlice = createSlice({
       .addCase(fetchArtist.rejected, (state) => {
         state.isArtistsAlbumsFetching = false;
       });
+
+    builder
+      .addCase(fetchTracks.pending, (state) => {
+        state.isTracksFetching = true;
+      })
+      .addCase(fetchTracks.fulfilled, (state, { payload: tracks }) => {
+        state.tracks = tracks;
+        state.isTracksFetching = false;
+      })
+      .addCase(fetchTracks.rejected, (state) => {
+        state.isTracksFetching = false;
+      });
+
+    builder
+      .addCase(fetchAlbum.pending, (state) => {
+        state.isTracksFetching = true;
+      })
+      .addCase(fetchAlbum.fulfilled, (state, { payload: album }) => {
+        state.album = album;
+        state.isTracksFetching = false;
+      })
+      .addCase(fetchAlbum.rejected, (state) => {
+        state.isTracksFetching = false;
+      });
   },
   selectors: {
     selectMusicArtists: (state) => state.artists,
     selectMusicArtistsFetching: (state) => state.isArtistsFetching,
     selectMusicArtistsAlbums: (state) => state.albums,
     selectMusicArtist: (state) => state.artist,
+    selectMusicTracksFetching: (state) => state.isTracksFetching,
+    selectMusicTracks: (state) => state.tracks,
+    selectMusicAlbum: (state) => state.album,
   },
 });
 
-export const { selectMusicArtists, selectMusicArtistsFetching, selectMusicArtistsAlbums, selectMusicArtist } =
-  musicSlice.selectors;
+export const {
+  selectMusicArtists,
+  selectMusicArtistsFetching,
+  selectMusicArtistsAlbums,
+  selectMusicArtist,
+  selectMusicTracksFetching,
+  selectMusicTracks,
+  selectMusicAlbum,
+} = musicSlice.selectors;

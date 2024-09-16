@@ -43,9 +43,9 @@ export const Artists: React.FC = () => {
         </div>
         <Separator className='my-4' />
 
-        <div className='flex gap-4 mb-10'>
+        <div className='flex gap-4'>
           {artists.map((artist) => (
-            <ArtistCard className='shrink-0 max-w-[200px]' artist={artist} />
+            <ArtistCard className='shrink-0 max-w-[200px]' descriptionShow={false} floatName artist={artist} />
           ))}
         </div>
       </div>

@@ -18,3 +18,15 @@ export interface Album {
   cover: string;
   release: number;
 }
+
+export interface OneAlbum extends Album {
+  artist: Artist;
+}
+
+export interface Track {
+  _id: string;
+  name: string;
+  album: string;
+  duration: string;
+  number: number;
+}
