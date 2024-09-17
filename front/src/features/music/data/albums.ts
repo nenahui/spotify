@@ -1,6 +1,6 @@
-import type { Album } from '@/types';
+import type { Cards } from '@/types';
 
-export const listenNowAlbums: Album[] = [
+export const listenNowAlbums: Cards[] = [
   {
     name: 'React Rendezvous',
     artist: 'Ethan Byte',
@@ -23,7 +23,7 @@ export const listenNowAlbums: Album[] = [
   },
 ];
 
-export const madeForYouAlbums: Album[] = [
+export const madeForYouAlbums: Cards[] = [
   {
     name: 'Thinking Components',
     artist: 'Lena Logic',

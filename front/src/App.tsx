@@ -1,3 +1,4 @@
+import { Register } from '@/components/auth/register';
 import { Album } from '@/features/music/album';
 import { Artists } from '@/features/music/artists';
 import { Music } from '@/features/music/music';
@@ -15,6 +16,7 @@ export const App: React.FC = () => {
         <Route path='artists/:id' element={<Album />} />
         <Route path='album/:id' element={<Tracks />} />
       </Route>
+      <Route path={'/register'} element={<Register />} />
     </Routes>
   );
 };

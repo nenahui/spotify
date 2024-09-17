@@ -11,11 +11,11 @@ import {
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
 import React from 'react';
-import { Album } from '@/types';
+import { Cards } from '@/types';
 import { playlists } from '../data/playlists';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
-  album: Album;
+  album: Cards;
   aspectRatio?: 'portrait' | 'square';
   width?: number;
   height?: number;

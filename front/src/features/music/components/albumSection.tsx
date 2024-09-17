@@ -2,12 +2,12 @@ import React from 'react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { AlbumArtwork } from './albumArtWork';
-import { Album } from '@/types';
+import { Cards } from '@/types';
 
 interface AlbumSectionProps {
   title: string;
   description: string;
-  albums: Album[];
+  albums: Cards[];
   albumWidth: number;
   albumHeight: number;
   aspectRatio: 'portrait' | 'square';
