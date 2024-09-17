@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Separator } from '@/components/ui/separator';
-import { BackButton } from '@/features/music/components/backButton';
-import { TrackCard } from '@/features/music/components/trackCard';
-import { selectMusicAlbum, selectMusicTracks } from '@/features/musicSlice';
-import { fetchAlbum, fetchTracks } from '@/features/musicThunks';
+import { BackButton } from '@/components/backButton';
+import { TrackCard } from '@/components/components/trackCard';
+import { selectMusicAlbum, selectMusicTracks } from '@/features/music/musicSlice';
+import { fetchAlbum, fetchTracks } from '@/features/music/musicThunks';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -29,12 +29,21 @@ export const Tracks: React.FC = () => {
         <h2 className='text-2xl font-semibold tracking-tight'>{album.name}</h2>
         <p className='text-sm text-muted-foreground'>{album.artist.name}</p>
       </div>
-      <Separator className={'my-4'} />
+      <Separator className={'my-4 mb-2'} />
 
-      <div className={'grid grid-cols-3 gap-2'}>
-        {tracks.map((track) => (
-          <TrackCard track={track} key={track._id} />
-        ))}
+      <div className={'grid grid-cols-4 gap-1'}>
+        <p className={'text-muted-foreground text-sm leading-none'}>Music</p>
+        <p className={'text-muted-foreground text-sm leading-none'}>Album</p>
+        <p className={'text-muted-foreground text-sm leading-none'}>Number</p>
+        <p className={'text-muted-foreground text-sm leading-none'}>Duration</p>
+
+        <Separator className={'mb-1 mt-1.5 col-span-4'} />
+
+        <div className={'flex flex-col gap-1.5 col-span-4'}>
+          {tracks.map((track) => (
+            <TrackCard track={track} key={track._id} />
+          ))}
+        </div>
       </div>
     </div>
   );

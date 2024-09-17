@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Separator } from '@/components/ui/separator';
 import { AlbumCard } from '@/features/music/components/albumCard';
-import { BackButton } from '@/features/music/components/backButton';
-import { selectMusicArtist, selectMusicArtistsAlbums } from '@/features/musicSlice';
-import { fetchArtist, fetchArtistAlbums } from '@/features/musicThunks';
+import { BackButton } from '@/components/backButton';
+import { selectMusicArtist, selectMusicArtistsAlbums } from '@/features/music/musicSlice';
+import { fetchArtist, fetchArtistAlbums } from '@/features/music/musicThunks';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -17,11 +17,6 @@ export const Album: React.FC = () => {
     dispatch(fetchArtistAlbums(artistId));
     dispatch(fetchArtist(artistId));
   }, [dispatch, artistId]);
-
-  useEffect(() => {
-    console.log(albums);
-    console.log(artist);
-  }, [albums, artist]);
 
   if (!artist) {
     return null;

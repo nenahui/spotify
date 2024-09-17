@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 export const Register = () => {
   return (
     <>
-      <div className='container relative hidden h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
+      <div className='container relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0'>
         <Link to='/' className={cn(buttonVariants({ variant: 'ghost' }), 'absolute right-4 top-4 md:right-8 md:top-8')}>
           Login
         </Link>
@@ -34,7 +34,7 @@ export const Register = () => {
                 Enter your username and password below to create your account
               </p>
             </div>
-            <UserAuthForm />
+            <UserAuthForm type={'register'} />
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import { Menu } from '@/features/music/components/menu';
-import { Sidebar } from '@/features/music/components/sidebar';
+import { Menu } from '@/components/menu';
+import { Sidebar } from '@/components/sidebar';
 import { playlists } from '@/features/music/data/playlists';
 import React from 'react';
 import { Outlet } from 'react-router-dom';

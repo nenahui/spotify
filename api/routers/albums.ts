@@ -35,7 +35,7 @@ albumsRouter.get('/:id', async (req, res, next) => {
 
     if (album === null) {
       return res.status(404).send({
-        error: 'Album not found',
+        error: 'Cards not found',
       });
     }
 

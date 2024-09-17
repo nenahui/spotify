@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Separator } from '@/components/ui/separator';
 import { ArtistCard } from '@/features/music/components/artistCard';
-import { selectMusicArtists } from '@/features/musicSlice';
-import { fetchArtists } from '@/features/musicThunks';
+import { selectMusicArtists } from '@/features/music/musicSlice';
+import { fetchArtists } from '@/features/music/musicThunks';
 import React, { useEffect } from 'react';
 
 export const Artists: React.FC = () => {
@@ -12,8 +12,6 @@ export const Artists: React.FC = () => {
   useEffect(() => {
     dispatch(fetchArtists());
   }, [dispatch]);
-
-  console.log(artists);
 
   return (
     <>
@@ -45,7 +43,13 @@ export const Artists: React.FC = () => {
 
         <div className='flex gap-4'>
           {artists.map((artist) => (
-            <ArtistCard className='shrink-0 max-w-[200px]' descriptionShow={false} floatName artist={artist} />
+            <ArtistCard
+              key={artist._id}
+              className='shrink-0 max-w-[200px]'
+              descriptionShow={false}
+              floatName
+              artist={artist}
+            />
           ))}
         </div>
       </div>

@@ -14,7 +14,7 @@ export interface Artist {
 export interface Album {
   _id: string;
   name: string;
-  artist: string;
+  artist: Artist;
   cover: string;
   release: number;
 }
@@ -26,7 +26,35 @@ export interface OneAlbum extends Album {
 export interface Track {
   _id: string;
   name: string;
-  album: string;
+  album: Album;
   duration: string;
   number: number;
+}
+
+export interface RegisterMutation {
+  username: string;
+  password: string;
+}
+
+export interface User {
+  _id: string;
+  username: string;
+  token: string;
+}
+
+export interface ValidationError {
+  error: string;
+  errors: {
+    [key: string]: {
+      name: string;
+      message: string;
+    };
+  };
+}
+
+export interface History {
+  _id: string;
+  datetime: string;
+  user: string;
+  track: Track;
 }

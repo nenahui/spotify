@@ -19,7 +19,7 @@ const TrackSchema = new Schema({
         return Boolean(album);
       },
     },
-    message: 'Album does not exists',
+    message: 'Cards does not exists',
   },
   duration: {
     type: String,

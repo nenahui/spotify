@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/app/hooks';
 import {
   Menubar,
   MenubarCheckboxItem,
@@ -5,8 +6,6 @@ import {
   MenubarItem,
   MenubarLabel,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
   MenubarSeparator,
   MenubarShortcut,
   MenubarSub,
@@ -14,8 +13,12 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from '@/components/ui/menubar';
+import { selectUser } from '@/features/users/usersSlice';
+import { Link } from 'react-router-dom';
 
 export function Menu() {
+  const user = useAppSelector(selectUser);
+
   return (
     <Menubar className='rounded-none border-t-0 border-x-0 px-2 lg:px-4 shadow-none'>
       <MenubarMenu>
@@ -182,17 +185,15 @@ export function Menu() {
       <MenubarMenu>
         <MenubarTrigger className='hidden md:block'>Account</MenubarTrigger>
         <MenubarContent forceMount>
-          <MenubarLabel inset>Switch Account</MenubarLabel>
+          {user ? (
+            <MenubarLabel>{user.username}</MenubarLabel>
+          ) : (
+            <MenubarItem asChild>
+              <Link to={'/login'}>Login</Link>
+            </MenubarItem>
+          )}
           <MenubarSeparator />
-          <MenubarRadioGroup value='benoit'>
-            <MenubarRadioItem value='andy'>Andy</MenubarRadioItem>
-            <MenubarRadioItem value='benoit'>Benoit</MenubarRadioItem>
-            <MenubarRadioItem value='Luis'>Luis</MenubarRadioItem>
-          </MenubarRadioGroup>
-          <MenubarSeparator />
-          <MenubarItem inset>Manage Family...</MenubarItem>
-          <MenubarSeparator />
-          <MenubarItem inset>Add Account...</MenubarItem>
+          <MenubarItem>Logout</MenubarItem>
         </MenubarContent>
       </MenubarMenu>
     </Menubar>

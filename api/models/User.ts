@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { type HydratedDocument } from 'mongoose';
 import type { UserFields } from '../types';
 import bcrypt from 'bcrypt';
 
@@ -11,11 +11,33 @@ const UserSchema = new Schema<UserFields>({
     type: String,
     required: true,
     unique: true,
+
+    validate: {
+      validator: async function (value: string): Promise<boolean> {
+        if (!(this as HydratedDocument<UserFields>).isModified('username')) {
+          return true;
+        }
+
+        const user = await User.findOne({ username: value });
+        return !user;
+      },
+      message: 'This user is already registered!',
+    },
   },
   password: {
     type: String,
     required: true,
-    minlength: 4,
+
+    validate: {
+      validator: async function (value: string): Promise<boolean> {
+        if (value.length < 4) {
+          return false;
+        }
+
+        return true;
+      },
+      msg: 'The password length cannot be less than 4!',
+    },
   },
   token: {
     type: String,
@@ -41,4 +63,4 @@ UserSchema.set('toJSON', {
   },
 });
 
-export const User = mongoose.model('User', UserSchema);
+export const User = mongoose.model('User', UserSchema as unknown as mongoose.Schema<UserFields>);

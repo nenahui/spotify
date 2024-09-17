@@ -1,24 +1,56 @@
-import { cn } from '@/lib/utils';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { selectRegisterError, selectRegisterLoading } from '@/features/users/usersSlice';
+import { register } from '@/features/users/usersThunks';
+import { cn } from '@/lib/utils';
+import type { RegisterMutation } from '@/types';
 import { Loader } from 'lucide-react';
-import React from 'react';
+import React, { type HTMLAttributes, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
-export const UserAuthForm = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  type: 'register' | 'login';
+}
 
-  async function onSubmit(event: React.SyntheticEvent) {
+export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
+  const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(selectRegisterLoading);
+  const navigate = useNavigate();
+  const error = useAppSelector(selectRegisterError);
+  const [state, setState] = useState<RegisterMutation>({
+    username: '',
+    password: '',
+  });
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+    setState((prev) => ({ ...prev, [id]: value }));
+    console.log(state);
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error.error || error.errors.password.message);
+    }
+  }, [error]);
+
+  const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }
+    try {
+      if (type === 'register') {
+        await dispatch(register(state)).unwrap();
+      }
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className={cn('grid gap-6')} {...props}>
       <form onSubmit={onSubmit}>
         <div className='grid gap-2'>
           <div className='grid gap-1'>
@@ -28,11 +60,13 @@ export const UserAuthForm = ({ className, ...props }: React.HTMLAttributes<HTMLD
             <Input
               required
               id='username'
-              placeholder='name@example.com'
+              placeholder='Enter your username'
               type='username'
               autoCapitalize='none'
               autoComplete='username'
               autoCorrect='off'
+              value={state.username}
+              onChange={onChange}
               disabled={isLoading}
             />
           </div>
@@ -49,6 +83,8 @@ export const UserAuthForm = ({ className, ...props }: React.HTMLAttributes<HTMLD
               autoCapitalize='none'
               autoComplete='new-password'
               autoCorrect='off'
+              value={state.password}
+              onChange={onChange}
               disabled={isLoading}
             />
           </div>

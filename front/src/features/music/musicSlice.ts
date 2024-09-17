@@ -1,5 +1,12 @@
-import { fetchAlbum, fetchArtist, fetchArtistAlbums, fetchArtists, fetchTracks } from '@/features/musicThunks';
-import type { Album, Artist, OneAlbum, Track } from '@/types';
+import {
+  fetchAlbum,
+  fetchArtist,
+  fetchArtistAlbums,
+  fetchArtists,
+  fetchHistory,
+  fetchTracks,
+} from '@/features/music/musicThunks';
+import type { Album, Artist, OneAlbum, Track, History } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface MusicState {
@@ -8,6 +15,8 @@ interface MusicState {
   artist: Artist | null;
   tracks: Track[];
   album: OneAlbum | null;
+  history: History[];
+  isHistoryFetching: boolean;
   isTracksFetching: boolean;
   isArtistsFetching: boolean;
   isArtistsAlbumsFetching: boolean;
@@ -19,6 +28,8 @@ const initialState: MusicState = {
   artist: null,
   tracks: [],
   album: null,
+  history: [],
+  isHistoryFetching: false,
   isTracksFetching: false,
   isArtistsFetching: false,
   isArtistsAlbumsFetching: false,
@@ -88,6 +99,18 @@ export const musicSlice = createSlice({
       .addCase(fetchAlbum.rejected, (state) => {
         state.isTracksFetching = false;
       });
+
+    builder
+      .addCase(fetchHistory.pending, (state) => {
+        state.isHistoryFetching = true;
+      })
+      .addCase(fetchHistory.fulfilled, (state, { payload: history }) => {
+        state.history = history;
+        state.isHistoryFetching = false;
+      })
+      .addCase(fetchHistory.rejected, (state) => {
+        state.isHistoryFetching = false;
+      });
   },
   selectors: {
     selectMusicArtists: (state) => state.artists,
@@ -97,6 +120,8 @@ export const musicSlice = createSlice({
     selectMusicTracksFetching: (state) => state.isTracksFetching,
     selectMusicTracks: (state) => state.tracks,
     selectMusicAlbum: (state) => state.album,
+    selectMusicHistory: (state) => state.history,
+    selectMusicHistoryFetching: (state) => state.isHistoryFetching,
   },
 });
 
@@ -108,4 +133,6 @@ export const {
   selectMusicTracksFetching,
   selectMusicTracks,
   selectMusicAlbum,
+  selectMusicHistoryFetching,
+  selectMusicHistory,
 } = musicSlice.selectors;
