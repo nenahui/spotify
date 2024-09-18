@@ -122,6 +122,7 @@ export const musicSlice = createSlice({
     selectMusicAlbum: (state) => state.album,
     selectMusicHistory: (state) => state.history,
     selectMusicHistoryFetching: (state) => state.isHistoryFetching,
+    selectMusicArtistsAlbumsFetching: (state) => state.isArtistsAlbumsFetching,
   },
 });
 
@@ -135,4 +136,5 @@ export const {
   selectMusicAlbum,
   selectMusicHistoryFetching,
   selectMusicHistory,
+  selectMusicArtistsAlbumsFetching,
 } = musicSlice.selectors;

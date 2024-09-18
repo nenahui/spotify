@@ -1,17 +1,23 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { Loader } from '@/components/components/loader';
 import { Separator } from '@/components/ui/separator';
 import { ArtistCard } from '@/features/music/components/artistCard';
-import { selectMusicArtists } from '@/features/music/musicSlice';
+import { selectMusicArtists, selectMusicArtistsFetching } from '@/features/music/musicSlice';
 import { fetchArtists } from '@/features/music/musicThunks';
 import React, { useEffect } from 'react';
 
 export const Artists: React.FC = () => {
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(selectMusicArtistsFetching);
   const artists = useAppSelector(selectMusicArtists);
 
   useEffect(() => {
     dispatch(fetchArtists());
   }, [dispatch]);
+
+  if (isLoading) {
+    return <Loader absoluteCenter background={false} />;
+  }
 
   return (
     <>

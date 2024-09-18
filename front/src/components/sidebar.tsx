@@ -1,9 +1,11 @@
+import { useAppSelector } from '@/app/hooks';
 import { Button } from '@/components/ui/button';
+import { Playlists } from '@/features/music/data/playlists';
+import { selectUser } from '@/features/users/usersSlice';
 import { cn } from '@/lib/utils';
 import { HistoryIcon } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Playlists } from '@/features/music/data/playlists';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   playlists: Playlists[];
@@ -39,6 +41,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({ to, active, icon, childre
 
 export function Sidebar({ className, playlists }: SidebarProps) {
   const [active, setActive] = React.useState('/');
+  const user = useAppSelector(selectUser);
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -73,13 +76,15 @@ export function Sidebar({ className, playlists }: SidebarProps) {
           >
             Browse
           </SidebarButton>
-          <SidebarButton
-            to='/history'
-            active={active.includes('history')}
-            icon={<HistoryIcon className='mr-2 h-4 w-4' />}
-          >
-            History
-          </SidebarButton>
+          {user?.token && (
+            <SidebarButton
+              to='/history'
+              active={active.includes('history')}
+              icon={<HistoryIcon className='mr-2 h-4 w-4' />}
+            >
+              History
+            </SidebarButton>
+          )}
         </SidebarSection>
         <SidebarSection title='Library'>
           <SidebarButton
