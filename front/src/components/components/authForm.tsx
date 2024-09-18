@@ -2,9 +2,13 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { selectRegisterError, selectRegisterLoading } from '@/features/users/usersSlice';
-import { register } from '@/features/users/usersThunks';
-import { cn } from '@/lib/utils';
+import {
+  selectLoginError,
+  selectLoginLoading,
+  selectRegisterError,
+  selectRegisterLoading,
+} from '@/features/users/usersSlice';
+import { login, register } from '@/features/users/usersThunks';
 import type { RegisterMutation } from '@/types';
 import { Loader } from 'lucide-react';
 import React, { type HTMLAttributes, useEffect, useState } from 'react';
@@ -17,9 +21,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 
 export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
   const dispatch = useAppDispatch();
-  const isLoading = useAppSelector(selectRegisterLoading);
+  const isRegisterLoading = useAppSelector(selectRegisterLoading);
+  const isLoginLoading = useAppSelector(selectLoginLoading);
   const navigate = useNavigate();
-  const error = useAppSelector(selectRegisterError);
+  const registerError = useAppSelector(selectRegisterError);
+  const loginError = useAppSelector(selectLoginError);
   const [state, setState] = useState<RegisterMutation>({
     username: '',
     password: '',
@@ -28,20 +34,23 @@ export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
     setState((prev) => ({ ...prev, [id]: value }));
-    console.log(state);
   };
 
   useEffect(() => {
-    if (error) {
-      toast.error(error.error || error.errors.password.message);
+    if (type === 'register' && registerError) {
+      toast.error(registerError.error || registerError.errors.password.message);
+    } else if (type === 'login' && loginError) {
+      toast.error(loginError.error || 'Invalid username or password');
     }
-  }, [error]);
+  }, [registerError, loginError, type]);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
       if (type === 'register') {
         await dispatch(register(state)).unwrap();
+      } else {
+        await dispatch(login(state)).unwrap();
       }
       navigate('/');
     } catch (error) {
@@ -50,49 +59,19 @@ export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
   };
 
   return (
-    <div className={cn('grid gap-6')} {...props}>
-      <form onSubmit={onSubmit}>
-        <div className='grid gap-2'>
-          <div className='grid gap-1'>
-            <Label className='sr-only' htmlFor='username'>
-              Username
-            </Label>
-            <Input
-              required
-              id='username'
-              placeholder='Enter your username'
-              type='username'
-              autoCapitalize='none'
-              autoComplete='username'
-              autoCorrect='off'
-              value={state.username}
-              onChange={onChange}
-              disabled={isLoading}
-            />
-          </div>
-
-          <div className='grid gap-1'>
-            <Label className='sr-only' htmlFor='password'>
-              Email
-            </Label>
-            <Input
-              required
-              id='password'
-              placeholder='Enter your password'
-              type='password'
-              autoCapitalize='none'
-              autoComplete='new-password'
-              autoCorrect='off'
-              value={state.password}
-              onChange={onChange}
-              disabled={isLoading}
-            />
-          </div>
-          <Button type='submit' disabled={isLoading}>
-            {isLoading && <Loader className='mr-2 h-4 w-4 animate-spin' />}
-            Sign Up
-          </Button>
+    <div {...props}>
+      <form onSubmit={onSubmit} className='space-y-4'>
+        <div>
+          <Label htmlFor='username'>Username</Label>
+          <Input id='username' value={state.username} onChange={onChange} required />
         </div>
+        <div>
+          <Label htmlFor='password'>Password</Label>
+          <Input id='password' type='password' value={state.password} onChange={onChange} required />
+        </div>
+        <Button type='submit' disabled={isRegisterLoading || isLoginLoading}>
+          {isRegisterLoading || isLoginLoading ? <Loader className='animate-spin' /> : 'Submit'}
+        </Button>
       </form>
     </div>
   );
