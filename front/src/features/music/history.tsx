@@ -17,7 +17,7 @@ export const History: React.FC = () => {
 
   useEffect(() => {
     if (!user?.token) {
-      navigate('/');
+      navigate('/login');
     }
   }, [user?.token, navigate]);
 

@@ -9,24 +9,6 @@ export const trackHistoryRouter = express.Router();
 
 trackHistoryRouter.get('/:userId', auth, async (req, res, next) => {
   try {
-    const headerValue = req.get('Authorization');
-
-    if (!headerValue) {
-      return res.status(401).send({ error: 'Header "Authorization" not found' });
-    }
-
-    const [_bearer, token] = headerValue.split(' ');
-
-    if (!token) {
-      return res.status(401).send({ error: 'Token not found' });
-    }
-
-    const user = await User.findOne({ token });
-
-    if (!user) {
-      return res.status(401).send({ error: 'Wrong token' });
-    }
-
     const trackHistories = await TrackHistory.find({ user: req.params.userId })
       .populate({
         path: 'track',
