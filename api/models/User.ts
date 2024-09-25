@@ -1,12 +1,13 @@
 import mongoose, { type HydratedDocument } from 'mongoose';
-import type { UserFields } from '../types';
+import { randomUUID } from 'node:crypto';
+import type { UserFields, UserMethods, UserModel } from '../types';
 import bcrypt from 'bcrypt';
 
 const SALT_WORK_FACTOR = 10;
 
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema<UserFields>({
+const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
   username: {
     type: String,
     required: true,
@@ -43,6 +44,12 @@ const UserSchema = new Schema<UserFields>({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    required: true,
+    enum: ['admin', 'user'],
+    default: 'user',
+  },
 });
 
 UserSchema.pre('save', async function (next) {
@@ -56,6 +63,14 @@ UserSchema.pre('save', async function (next) {
   return next();
 });
 
+UserSchema.methods.checkPassword = function (password) {
+  return bcrypt.compare(password, this.password);
+};
+
+UserSchema.methods.generateToken = function () {
+  this.token = randomUUID();
+};
+
 UserSchema.set('toJSON', {
   transform: (_doc, ret) => {
     delete ret.password;
@@ -63,4 +78,4 @@ UserSchema.set('toJSON', {
   },
 });
 
-export const User = mongoose.model('User', UserSchema as unknown as mongoose.Schema<UserFields>);
+export const User = mongoose.model<UserFields, UserModel>('User', UserSchema);

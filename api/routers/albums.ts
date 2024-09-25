@@ -1,6 +1,9 @@
 import express from 'express';
 import mongoose, { Types } from 'mongoose';
+import { auth } from '../middleware/auth';
+import { permit } from '../middleware/permit';
 import { Album } from '../models/Album';
+import { Track } from '../models/Track';
 import { imagesUpload } from '../multer';
 import type { AlbumMutation } from '../types';
 
@@ -45,7 +48,7 @@ albumsRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-albumsRouter.post('/', imagesUpload.single('cover'), async (req, res, next) => {
+albumsRouter.post('/', auth, imagesUpload.single('cover'), async (req, res, next) => {
   try {
     const albumMutation: AlbumMutation = {
       artist: req.body.artist,
@@ -62,6 +65,40 @@ albumsRouter.post('/', imagesUpload.single('cover'), async (req, res, next) => {
     if (error instanceof mongoose.Error.ValidationError) {
       return res.status(400).send(error);
     }
+    return next(error);
+  }
+});
+
+albumsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const album = await Album.findById(req.params.id);
+
+    if (album === null) {
+      return res.status(404).send({
+        error: 'Album not found',
+      });
+    }
+
+    await Album.deleteOne({ _id: req.params.id });
+
+    return res.send({ message: `Album ${album.name} successfully deleted` });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+albumsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
+  try {
+    const album = await Album.findOne({ _id: req.params.id });
+
+    if (!album) {
+      return res.status(404).send({ error: 'Album not found' });
+    }
+
+    await Album.updateOne({ _id: req.params.id }, { $set: { isPublished: !album.isPublished } });
+
+    return res.send({ message: `Album ${album.name} successfully updated` });
+  } catch (error) {
     return next(error);
   }
 });
