@@ -7,7 +7,7 @@ interface Props {
   background?: boolean;
 }
 
-export const Loader: React.FC<Props> = ({ className, absoluteCenter, background = true }) => {
+export const Loader: React.FC<Props> = ({ className, absoluteCenter = false, background = true }) => {
   return (
     <div
       className={`${background && 'bg-black/25 w-screen h-screen fixed top-1/2 left-1/2 z-50 overflow-hidden -translate-x-2/4 -translate-y-2/4'}`}

@@ -1,4 +1,6 @@
 import {
+  createAlbum,
+  createArtist,
   fetchAlbum,
   fetchArtist,
   fetchArtistAlbums,
@@ -20,6 +22,8 @@ interface MusicState {
   isTracksFetching: boolean;
   isArtistsFetching: boolean;
   isArtistsAlbumsFetching: boolean;
+  isArtistsCreating: boolean;
+  isAlbumsCreating: boolean;
 }
 
 const initialState: MusicState = {
@@ -33,6 +37,8 @@ const initialState: MusicState = {
   isTracksFetching: false,
   isArtistsFetching: false,
   isArtistsAlbumsFetching: false,
+  isArtistsCreating: false,
+  isAlbumsCreating: false,
 };
 
 export const musicSlice = createSlice({
@@ -111,6 +117,28 @@ export const musicSlice = createSlice({
       .addCase(fetchHistory.rejected, (state) => {
         state.isHistoryFetching = false;
       });
+
+    builder
+      .addCase(createArtist.pending, (state) => {
+        state.isArtistsCreating = true;
+      })
+      .addCase(createArtist.fulfilled, (state) => {
+        state.isArtistsCreating = false;
+      })
+      .addCase(createArtist.rejected, (state) => {
+        state.isArtistsCreating = false;
+      });
+
+    builder
+      .addCase(createAlbum.pending, (state) => {
+        state.isAlbumsCreating = true;
+      })
+      .addCase(createAlbum.fulfilled, (state) => {
+        state.isAlbumsCreating = false;
+      })
+      .addCase(createAlbum.rejected, (state) => {
+        state.isAlbumsCreating = false;
+      });
   },
   selectors: {
     selectMusicArtists: (state) => state.artists,
@@ -123,6 +151,8 @@ export const musicSlice = createSlice({
     selectMusicHistory: (state) => state.history,
     selectMusicHistoryFetching: (state) => state.isHistoryFetching,
     selectMusicArtistsAlbumsFetching: (state) => state.isArtistsAlbumsFetching,
+    selectMusicArtistsCreating: (state) => state.isArtistsCreating,
+    selectMusicAlbumsCreating: (state) => state.isAlbumsCreating,
   },
 });
 
@@ -137,4 +167,6 @@ export const {
   selectMusicHistoryFetching,
   selectMusicHistory,
   selectMusicArtistsAlbumsFetching,
+  selectMusicArtistsCreating,
+  selectMusicAlbumsCreating,
 } = musicSlice.selectors;

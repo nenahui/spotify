@@ -1,6 +1,6 @@
 import type { RootState } from '@/app/store';
 import { axiosApi } from '@/axiosApi';
-import type { Album, Artist, OneAlbum, Track, History } from '@/types';
+import type { Album, AlbumMutation, Artist, ArtistMutation, History, OneAlbum, Track } from '@/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchArtists = createAsyncThunk<Artist[]>('music/fetchArtists', async () => {
@@ -70,3 +70,31 @@ export const fetchHistory = createAsyncThunk<History[], void, { state: RootState
     return history;
   }
 );
+
+export const createArtist = createAsyncThunk<void, ArtistMutation>('music/createArtist', async (artistMutation) => {
+  const formData = new FormData();
+
+  const keys = Object.keys(artistMutation) as (keyof ArtistMutation)[];
+  keys.forEach((key) => {
+    const value = artistMutation[key];
+    if (value !== null) {
+      formData.append(key, value);
+    }
+  });
+
+  await axiosApi.post('/artists', formData);
+});
+
+export const createAlbum = createAsyncThunk('music/createAlbum', async (albumMutation: AlbumMutation) => {
+  const formData = new FormData();
+
+  const keys = Object.keys(albumMutation) as (keyof AlbumMutation)[];
+  keys.forEach((key) => {
+    const value = albumMutation[key];
+    if (value !== null) {
+      formData.append(key, value);
+    }
+  });
+
+  await axiosApi.post('/albums', formData);
+});

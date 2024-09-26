@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { Loader } from '@/components/components/loader';
+import { Loader } from '@/components/loader';
 import { Separator } from '@/components/ui/separator';
 import { ArtistCard } from '@/features/music/components/artistCard';
 import { selectMusicArtists, selectMusicArtistsFetching } from '@/features/music/musicSlice';

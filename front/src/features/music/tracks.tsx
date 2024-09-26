@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { Loader } from '@/components/components/loader';
+import { Loader } from '@/components/loader';
 import { Separator } from '@/components/ui/separator';
 import { BackButton } from '@/components/backButton';
-import { TrackCard } from '@/components/components/trackCard';
+import { TrackCard } from '@/components/trackCard';
 import { selectMusicAlbum, selectMusicTracks, selectMusicTracksFetching } from '@/features/music/musicSlice';
 import { fetchAlbum, fetchTracks } from '@/features/music/musicThunks';
 import React, { useEffect } from 'react';
@@ -37,20 +37,26 @@ export const Tracks: React.FC = () => {
       </div>
       <Separator className={'my-4 mb-2'} />
 
-      <div className={'grid grid-cols-4 gap-1'}>
-        <p className={'text-muted-foreground text-sm leading-none'}>Music</p>
-        <p className={'text-muted-foreground text-sm leading-none'}>Album</p>
-        <p className={'text-muted-foreground text-sm leading-none'}>Number</p>
-        <p className={'text-muted-foreground text-sm leading-none'}>Duration</p>
+      {!isLoading && tracks.length === 0 ? (
+        <p className={'text-muted-foreground'}>There are no tracks in the album</p>
+      ) : (
+        <>
+          <div className={'grid grid-cols-4 gap-1'}>
+            <p className={'text-muted-foreground text-sm leading-none'}>Music</p>
+            <p className={'text-muted-foreground text-sm leading-none'}>Album</p>
+            <p className={'text-muted-foreground text-sm leading-none'}>Number</p>
+            <p className={'text-muted-foreground text-sm leading-none'}>Duration</p>
 
-        <Separator className={'mb-1 mt-1.5 col-span-4'} />
+            <Separator className={'mb-1 mt-1.5 col-span-4'} />
+          </div>
 
-        <div className={'flex flex-col gap-1.5 col-span-4'}>
-          {tracks.map((track) => (
-            <TrackCard track={track} key={track._id} />
-          ))}
-        </div>
-      </div>
+          <div className={'flex flex-col gap-1.5 col-span-4'}>
+            {tracks.map((track) => (
+              <TrackCard track={track} key={track._id} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

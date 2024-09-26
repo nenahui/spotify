@@ -11,12 +11,25 @@ export interface Artist {
   picture: string;
 }
 
+export interface ArtistMutation {
+  name: string;
+  information: string;
+  picture: File | null;
+}
+
 export interface Album {
   _id: string;
   name: string;
   artist: Artist;
   cover: string;
   release: number;
+}
+
+export interface AlbumMutation {
+  name: string;
+  artist: string;
+  cover: File | null;
+  release: string;
 }
 
 export interface OneAlbum extends Album {

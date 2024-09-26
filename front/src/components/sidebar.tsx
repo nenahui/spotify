@@ -1,6 +1,10 @@
+import { useAppSelector } from '@/app/hooks';
 import { ListIc } from '@/assets/icons/list';
+import { NewSquareIc } from '@/assets/icons/newSquare';
+import { NewUserIc } from '@/assets/icons/newUser';
 import { UsersIc } from '@/assets/icons/users';
 import { Button } from '@/components/ui/button';
+import { selectUser } from '@/features/users/usersSlice';
 import { cn } from '@/lib/utils';
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
@@ -34,6 +38,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({ to, active, icon, childre
 );
 
 export const Sidebar = ({ className }: { className?: string }) => {
+  const user = useAppSelector(selectUser);
   const [active, setActive] = React.useState('/');
   const { pathname } = useLocation();
 
@@ -55,9 +60,21 @@ export const Sidebar = ({ className }: { className?: string }) => {
             Browse
           </SidebarButton>
 
-          <SidebarButton to='/history' active={active === 'history'} icon={<ListIc />}>
-            History
-          </SidebarButton>
+          {user && (
+            <>
+              <SidebarButton to='/history' active={active === 'history'} icon={<ListIc />}>
+                History
+              </SidebarButton>
+
+              <SidebarButton to='/new-artists' active={active === 'new-artists'} icon={<NewUserIc />}>
+                New Artist
+              </SidebarButton>
+
+              <SidebarButton to='/new-album' active={active === 'new-album'} icon={<NewSquareIc />}>
+                New Album
+              </SidebarButton>
+            </>
+          )}
         </SidebarSection>
       </div>
     </div>

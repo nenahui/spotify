@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { Loader } from '@/components/components/loader';
+import { Loader } from '@/components/loader';
 import { HistoryCard } from '@/features/music/components/historyCard';
 import { selectMusicHistory, selectMusicHistoryFetching } from '@/features/music/musicSlice';
 import { fetchHistory } from '@/features/music/musicThunks';

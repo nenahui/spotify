@@ -1,7 +1,9 @@
-import { useAppDispatch } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { selectMusicArtistsCreating } from '@/features/music/musicSlice';
 import { createArtist } from '@/features/music/musicThunks';
 import type { ArtistMutation } from '@/types';
 import { PlusIcon } from '@radix-ui/react-icons';
@@ -17,6 +19,7 @@ const initialState: ArtistMutation = {
 export const NewArtists: React.FC = () => {
   const [artistMutation, setArtistMutation] = useState<ArtistMutation>(initialState);
   const dispatch = useAppDispatch();
+  const isCreating = useAppSelector(selectMusicArtistsCreating);
   const navigate = useNavigate();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -79,8 +82,9 @@ export const NewArtists: React.FC = () => {
             <Input type={'file'} id={'picture'} onChange={handleImageChange} required />
           </div>
 
-          <Button type={'submit'} className={'flex gap-1'}>
-            Create <PlusIcon />
+          <Button disabled={isCreating} type={'submit'} className={'flex gap-1'}>
+            Create{' '}
+            {isCreating ? <Loader background={false} className={'text-muted-foreground size-4'} /> : <PlusIcon />}
           </Button>
         </div>
       </form>
