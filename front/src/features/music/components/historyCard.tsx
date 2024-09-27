@@ -9,6 +9,10 @@ interface Props {
 }
 
 export const HistoryCard: React.FC<Props> = ({ track, datetime }) => {
+  if (!track) {
+    return null;
+  }
+
   return (
     <Card className={'p-3 py-2 shadow-none rounded-md flex justify-between items-center'}>
       <div className={'flex gap-1.5 items-center'}>

@@ -62,7 +62,7 @@ export const ArtistCard = ({
         <div
           className={`space-y-1 text-sm ${floatName && 'absolute bottom-2 w-[90%] left-1/2 -translate-x-2/4 text-white bg-gray-400 pointer-events-none p-3 py-3 rounded-lg backdrop-blur'} bg-opacity-50`}
         >
-          <h3 className='leading-none text-center'>{artist.name}</h3>
+          <h3 className={`leading-none text-center ${!floatName && descriptionShow && 'mt-2'}`}>{artist.name}</h3>
           {descriptionShow && (
             <p className='text-xs text-muted-foreground text-wrap line-clamp-3'>{artist.information}</p>
           )}
