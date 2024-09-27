@@ -45,12 +45,12 @@ export const Tracks: React.FC = () => {
         <p className={'text-muted-foreground'}>There are no tracks in the album</p>
       ) : (
         <>
-          <div className={'grid grid-cols-5 gap-1'}>
+          <div className={`grid ${user?.role === 'admin' ? 'grid-cols-5' : 'grid-cols-4'} gap-1`}>
             <p className={'text-muted-foreground text-sm leading-none'}>Music</p>
             <p className={'text-muted-foreground text-sm leading-none'}>Album</p>
             <p className={'text-muted-foreground text-sm leading-none'}>Number</p>
             <p className={'text-muted-foreground text-sm leading-none'}>Duration</p>
-            <p className={'text-muted-foreground text-sm leading-none'}>Status</p>
+            {user?.role === 'admin' && <p className={'text-muted-foreground text-sm leading-none'}>Status</p>}
 
             <Separator className={'mb-1 mt-1.5 col-span-4'} />
           </div>

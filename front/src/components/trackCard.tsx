@@ -33,9 +33,7 @@ export const TrackCard: React.FC<Props> = ({ track }) => {
 
   return (
     <Card
-      className={
-        'p-3 py-5 w-full dark grid relative text-sm grid-cols-5 group items-center gap-2.5 bg-gradient-to-r from-gray-900 to-gray-950'
-      }
+      className={`p-3 py-5 w-full dark grid relative text-sm ${user?.role === 'admin' ? 'grid-cols-5' : 'grid-cols-4'} group items-center gap-2.5 bg-gradient-to-r from-gray-900 to-gray-950`}
     >
       <h3 className={'font-normal'}>{track.name}</h3>
       <span>{track.album.name}</span>
