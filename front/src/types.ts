@@ -9,6 +9,7 @@ export interface Artist {
   name: string;
   information: string;
   picture: string;
+  isPublished: boolean;
 }
 
 export interface ArtistMutation {
@@ -23,6 +24,7 @@ export interface Album {
   artist: Artist;
   cover: string;
   release: number;
+  isPublished: boolean;
 }
 
 export interface AlbumMutation {
@@ -42,6 +44,13 @@ export interface Track {
   album: Album;
   duration: string;
   number: number;
+  isPublished: boolean;
+}
+
+export interface TrackMutation {
+  name: string;
+  album: string;
+  duration: string;
 }
 
 export interface RegisterMutation {
@@ -53,6 +62,7 @@ export interface User {
   _id: string;
   username: string;
   token: string;
+  role: 'admin' | 'user';
 }
 
 export interface ValidationError {

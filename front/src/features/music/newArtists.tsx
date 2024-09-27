@@ -9,6 +9,7 @@ import type { ArtistMutation } from '@/types';
 import { PlusIcon } from '@radix-ui/react-icons';
 import React, { type ChangeEvent, type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const initialState: ArtistMutation = {
   name: '',
@@ -41,13 +42,16 @@ export const NewArtists: React.FC = () => {
   };
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    await dispatch(createArtist(artistMutation)).unwrap();
-    setArtistMutation(initialState);
-    navigate('/');
+    try {
+      event.preventDefault();
+      await dispatch(createArtist(artistMutation)).unwrap();
+      setArtistMutation(initialState);
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      return toast.error('Artist already exists');
+    }
   };
-
-  console.log(artistMutation);
 
   return (
     <div className={'px-4 py-6 lg:px-8'}>

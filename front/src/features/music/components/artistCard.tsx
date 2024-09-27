@@ -1,5 +1,12 @@
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { Loader } from '@/components/loader';
+import { Badge } from '@/components/ui/badge';
+import { selectMusicArtistsDeleting, selectMusicArtistsPublishing } from '@/features/music/musicSlice';
+import { deleteArtist, fetchArtists, publishArtist } from '@/features/music/musicThunks';
+import { selectUser } from '@/features/users/usersSlice';
 import { cn } from '@/lib/utils';
 import type { Artist } from '@/types';
+import { TrashIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -20,9 +27,27 @@ export const ArtistCard = ({
   floatName = false,
   ...props
 }: Props) => {
+  const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const isArtistDeleting = useAppSelector(selectMusicArtistsDeleting);
+  const isArtistPublishing = useAppSelector(selectMusicArtistsPublishing);
+
+  const handleDelete = async () => {
+    await dispatch(deleteArtist(artist._id));
+    dispatch(fetchArtists());
+  };
+
+  const handlePublish = async () => {
+    await dispatch(publishArtist(artist._id));
+    dispatch(fetchArtists());
+  };
+
   return (
-    <Link to={`/artists/${artist._id}`}>
-      <div className={cn('space-y-3 rounded-lg relative', className)} {...props}>
+    <div
+      className={cn(`space-y-3 rounded-lg relative ${floatName && !descriptionShow && 'w-52'}`, className)}
+      {...props}
+    >
+      <Link to={`/artists/${artist._id}`}>
         <div className='overflow-hidden rounded-md'>
           <img
             src={`http://localhost:8000/${artist.picture}`}
@@ -42,7 +67,22 @@ export const ArtistCard = ({
             <p className='text-xs text-muted-foreground text-wrap line-clamp-3'>{artist.information}</p>
           )}
         </div>
-      </div>
-    </Link>
+      </Link>
+      {user?.role === 'admin' && artist.isPublished ? (
+        <Badge onClick={handleDelete} variant={'destructive'} className={'absolute top-1 right-2'}>
+          {isArtistDeleting ? <Loader className={'size-3.5'} background={false} /> : <TrashIcon />}
+        </Badge>
+      ) : user?.role === 'admin' ? (
+        <>
+          <Badge className={'absolute top-1 left-2'}>Unpublished</Badge>
+          <Badge onClick={handlePublish} variant={'secondary'} className={'absolute top-1 right-2'}>
+            Publish
+            {isArtistPublishing && <Loader background={false} className={'text-muted-foreground size-3 ml-1'} />}
+          </Badge>
+        </>
+      ) : (
+        <></>
+      )}
+    </div>
   );
 };

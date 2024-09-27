@@ -1,10 +1,11 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { NewSquareIc } from '@/assets/icons/newSquare';
+import { Loader } from '@/components/loader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { selectMusicArtists, selectMusicArtistsFetching } from '@/features/music/musicSlice';
+import { selectMusicAlbumsCreating, selectMusicArtists, selectMusicArtistsFetching } from '@/features/music/musicSlice';
 import { createAlbum, fetchArtists } from '@/features/music/musicThunks';
 import type { AlbumMutation } from '@/types';
 import React, { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
@@ -22,6 +23,7 @@ export const NewAlbum: React.FC = () => {
   const dispatch = useAppDispatch();
   const artists = useAppSelector(selectMusicArtists);
   const artistsFetching = useAppSelector(selectMusicArtistsFetching);
+  const albumsCreating = useAppSelector(selectMusicAlbumsCreating);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,12 +57,10 @@ export const NewAlbum: React.FC = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    dispatch(createAlbum(albumMutation)).unwrap();
+    await dispatch(createAlbum(albumMutation)).unwrap();
     setAlbumMutation(initialState);
     navigate(`/artists/${albumMutation.artist}`);
   };
-
-  console.log(albumMutation);
 
   return (
     <div className={'px-4 py-6 lg:px-8'}>
@@ -114,8 +114,13 @@ export const NewAlbum: React.FC = () => {
             <Input type={'file'} id={'cover'} onChange={handleImageChange} required />
           </div>
 
-          <Button type={'submit'} className={'flex gap-1'}>
-            Create <NewSquareIc />
+          <Button disabled={albumsCreating} type={'submit'} className={'flex gap-1'}>
+            Create
+            {albumsCreating ? (
+              <Loader background={false} className={'text-muted-foreground size-4'} />
+            ) : (
+              <NewSquareIc />
+            )}
           </Button>
         </div>
       </form>

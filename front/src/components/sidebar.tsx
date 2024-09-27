@@ -1,5 +1,6 @@
 import { useAppSelector } from '@/app/hooks';
 import { ListIc } from '@/assets/icons/list';
+import { MusicIc } from '@/assets/icons/music';
 import { NewSquareIc } from '@/assets/icons/newSquare';
 import { NewUserIc } from '@/assets/icons/newUser';
 import { UsersIc } from '@/assets/icons/users';
@@ -30,7 +31,7 @@ interface SidebarButtonProps {
 
 const SidebarButton: React.FC<SidebarButtonProps> = ({ to, active, icon, children }) => (
   <Link to={to} className='block'>
-    <Button variant={active ? 'secondary' : 'ghost'} className={`w-full flex gap-1.5 items-center justify-start`}>
+    <Button variant={active ? 'secondary' : 'ghost'} className={'w-full flex gap-1.5 items-center justify-start'}>
       {icon}
       {children}
     </Button>
@@ -72,6 +73,10 @@ export const Sidebar = ({ className }: { className?: string }) => {
 
               <SidebarButton to='/new-album' active={active === 'new-album'} icon={<NewSquareIc />}>
                 New Album
+              </SidebarButton>
+
+              <SidebarButton to='/new-track' active={active === 'new-track'} icon={<MusicIc />}>
+                New Track
               </SidebarButton>
             </>
           )}

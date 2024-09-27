@@ -10,14 +10,16 @@ import {
 } from '@/components/ui/menubar';
 import { selectUser } from '@/features/users/usersSlice';
 import { logout } from '@/features/users/usersThunks';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function Menu() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate('/');
   };
 
   return (
@@ -28,7 +30,7 @@ export function Menu() {
         </Link>
 
         <MenubarMenu>
-          <MenubarTrigger className='hidden md:block'>Account</MenubarTrigger>
+          <MenubarTrigger>Account</MenubarTrigger>
           <MenubarContent forceMount>
             {user ? (
               <>

@@ -4,6 +4,7 @@ import { Artists } from '@/features/music/artists';
 import { History } from '@/features/music/history';
 import { NewAlbum } from '@/features/music/newAlbum';
 import { NewArtists } from '@/features/music/newArtists';
+import { NewTrack } from '@/features/music/newTrack';
 import { Tracks } from '@/features/music/tracks';
 import { Login } from '@/features/users/login';
 import { Register } from '@/features/users/Register';
@@ -22,6 +23,7 @@ export const App: React.FC = () => {
           <Route path='history' element={<History />} />
           <Route path='new-artists' element={<NewArtists />} />
           <Route path='new-album' element={<NewAlbum />} />
+          <Route path='new-track' element={<NewTrack />} />
         </Route>
         <Route path={'/register'} element={<Register />} />
         <Route path={'/login'} element={<Login />} />

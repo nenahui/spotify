@@ -1,6 +1,6 @@
 import type { RootState } from '@/app/store';
 import { axiosApi } from '@/axiosApi';
-import type { Album, AlbumMutation, Artist, ArtistMutation, History, OneAlbum, Track } from '@/types';
+import type { Album, AlbumMutation, Artist, ArtistMutation, History, OneAlbum, Track, TrackMutation } from '@/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchArtists = createAsyncThunk<Artist[]>('music/fetchArtists', async () => {
@@ -97,4 +97,32 @@ export const createAlbum = createAsyncThunk('music/createAlbum', async (albumMut
   });
 
   await axiosApi.post('/albums', formData);
+});
+
+export const createTrack = createAsyncThunk('music/createTrack', async (trackMutation: TrackMutation) => {
+  await axiosApi.post('/tracks', trackMutation);
+});
+
+export const deleteArtist = createAsyncThunk<void, string>('music/deleteArtist', async (artistId) => {
+  await axiosApi.delete('/artists/' + artistId);
+});
+
+export const deleteAlbum = createAsyncThunk<void, string>('music/deleteAlbum', async (albumId) => {
+  await axiosApi.delete('/albums/' + albumId);
+});
+
+export const deleteTrack = createAsyncThunk('music/deleteTrack', async (trackId: string) => {
+  await axiosApi.delete('/tracks/' + trackId);
+});
+
+export const publishArtist = createAsyncThunk<void, string>('music/publishArtist', async (artistId) => {
+  await axiosApi.patch(`/artists/${artistId}/togglePublished`);
+});
+
+export const publishAlbum = createAsyncThunk<void, string>('music/publishAlbum', async (albumId) => {
+  await axiosApi.patch(`/albums/${albumId}/togglePublished`);
+});
+
+export const publishTrack = createAsyncThunk<void, string>('music/publishTrack', async (trackId) => {
+  await axiosApi.patch(`/tracks/${trackId}/togglePublished`);
 });

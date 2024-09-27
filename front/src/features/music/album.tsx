@@ -9,11 +9,13 @@ import {
   selectMusicArtistsAlbumsFetching,
 } from '@/features/music/musicSlice';
 import { fetchArtist, fetchArtistAlbums } from '@/features/music/musicThunks';
+import { selectUser } from '@/features/users/usersSlice';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 export const Album: React.FC = () => {
   const dispatch = useAppDispatch();
+  const user = useAppSelector(selectUser);
   const albums = useAppSelector(selectMusicArtistsAlbums);
   const isLoading = useAppSelector(selectMusicArtistsAlbumsFetching);
   const artist = useAppSelector(selectMusicArtist);
@@ -32,6 +34,8 @@ export const Album: React.FC = () => {
     return <p>Error happened</p>;
   }
 
+  const publishedAlbums = albums.filter((album) => album.isPublished);
+
   return (
     <div className={'px-4 py-6 lg:px-8'}>
       <BackButton className={'mb-2'} />
@@ -39,7 +43,7 @@ export const Album: React.FC = () => {
         <img
           className={'rounded-md max-w-xs object-cover size-32 aspect-square'}
           src={`http://localhost:8000/${artist.picture}`}
-          alt={artist.name + ' image'}
+          alt={`${artist.name} image`}
         />
         <div className='space-y-1'>
           <h2 className='text-2xl font-semibold tracking-tight'>{artist.name}</h2>
@@ -58,10 +62,18 @@ export const Album: React.FC = () => {
       {!isLoading && albums.length === 0 ? (
         <p className={'text-muted-foreground text-center'}>{artist.name} has no albums</p>
       ) : (
-        <div className={'grid grid-cols-4 gap-4'}>
-          {albums.map((album) => (
-            <AlbumCard album={album} key={album._id} />
-          ))}
+        <div className={'grid gap-2 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'}>
+          {user?.role === 'admin' ? (
+            albums.length === 0 ? (
+              <p className={'text-muted-foreground text-sm'}>No unpublished albums available</p>
+            ) : (
+              albums.map((album) => <AlbumCard key={album._id} album={album} />)
+            )
+          ) : publishedAlbums.length === 0 ? (
+            <p className={'text-muted-foreground text-sm'}>No published albums available</p>
+          ) : (
+            publishedAlbums.map((album) => <AlbumCard key={album._id} album={album} />)
+          )}
         </div>
       )}
     </div>

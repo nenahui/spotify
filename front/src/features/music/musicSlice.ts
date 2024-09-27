@@ -1,12 +1,19 @@
 import {
   createAlbum,
   createArtist,
+  createTrack,
+  deleteAlbum,
+  deleteArtist,
+  deleteTrack,
   fetchAlbum,
   fetchArtist,
   fetchArtistAlbums,
   fetchArtists,
   fetchHistory,
   fetchTracks,
+  publishAlbum,
+  publishArtist,
+  publishTrack,
 } from '@/features/music/musicThunks';
 import type { Album, Artist, OneAlbum, Track, History } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
@@ -24,6 +31,13 @@ interface MusicState {
   isArtistsAlbumsFetching: boolean;
   isArtistsCreating: boolean;
   isAlbumsCreating: boolean;
+  isTracksCreating: boolean;
+  isArtistsDeleting: boolean;
+  isAlbumDeleting: boolean;
+  isTracksDeleting: boolean;
+  isAlbumPublishing: boolean;
+  isTrackPublishing: boolean;
+  isArtistPublishing: boolean;
 }
 
 const initialState: MusicState = {
@@ -39,6 +53,13 @@ const initialState: MusicState = {
   isArtistsAlbumsFetching: false,
   isArtistsCreating: false,
   isAlbumsCreating: false,
+  isTracksCreating: false,
+  isArtistsDeleting: false,
+  isAlbumDeleting: false,
+  isTracksDeleting: false,
+  isAlbumPublishing: false,
+  isArtistPublishing: false,
+  isTrackPublishing: false,
 };
 
 export const musicSlice = createSlice({
@@ -139,6 +160,83 @@ export const musicSlice = createSlice({
       .addCase(createAlbum.rejected, (state) => {
         state.isAlbumsCreating = false;
       });
+
+    builder
+      .addCase(createTrack.pending, (state) => {
+        state.isTracksCreating = true;
+      })
+      .addCase(createTrack.fulfilled, (state) => {
+        state.isTracksCreating = false;
+      })
+      .addCase(createTrack.rejected, (state) => {
+        state.isTracksCreating = false;
+      });
+
+    builder
+      .addCase(deleteArtist.pending, (state) => {
+        state.isArtistsDeleting = true;
+      })
+      .addCase(deleteArtist.fulfilled, (state) => {
+        state.isArtistsDeleting = false;
+      })
+      .addCase(deleteArtist.rejected, (state) => {
+        state.isArtistsDeleting = false;
+      });
+
+    builder
+      .addCase(deleteAlbum.pending, (state) => {
+        state.isAlbumDeleting = true;
+      })
+      .addCase(deleteAlbum.fulfilled, (state) => {
+        state.isAlbumDeleting = false;
+      })
+      .addCase(deleteAlbum.rejected, (state) => {
+        state.isAlbumDeleting = false;
+      });
+
+    builder
+      .addCase(deleteTrack.pending, (state) => {
+        state.isTracksDeleting = true;
+      })
+      .addCase(deleteTrack.fulfilled, (state) => {
+        state.isTracksDeleting = false;
+      })
+      .addCase(deleteTrack.rejected, (state) => {
+        state.isTracksDeleting = false;
+      });
+
+    builder
+      .addCase(publishAlbum.pending, (state) => {
+        state.isAlbumPublishing = true;
+      })
+      .addCase(publishAlbum.fulfilled, (state) => {
+        state.isAlbumPublishing = false;
+      })
+      .addCase(publishAlbum.rejected, (state) => {
+        state.isAlbumPublishing = false;
+      });
+
+    builder
+      .addCase(publishArtist.pending, (state) => {
+        state.isArtistPublishing = true;
+      })
+      .addCase(publishArtist.fulfilled, (state) => {
+        state.isArtistPublishing = false;
+      })
+      .addCase(publishArtist.rejected, (state) => {
+        state.isArtistPublishing = false;
+      });
+
+    builder
+      .addCase(publishTrack.pending, (state) => {
+        state.isTrackPublishing = true;
+      })
+      .addCase(publishTrack.fulfilled, (state) => {
+        state.isTrackPublishing = false;
+      })
+      .addCase(publishTrack.rejected, (state) => {
+        state.isTrackPublishing = false;
+      });
   },
   selectors: {
     selectMusicArtists: (state) => state.artists,
@@ -153,6 +251,13 @@ export const musicSlice = createSlice({
     selectMusicArtistsAlbumsFetching: (state) => state.isArtistsAlbumsFetching,
     selectMusicArtistsCreating: (state) => state.isArtistsCreating,
     selectMusicAlbumsCreating: (state) => state.isAlbumsCreating,
+    selectMusicTracksCreating: (state) => state.isTracksCreating,
+    selectMusicArtistsDeleting: (state) => state.isArtistsDeleting,
+    selectMusicAlbumsDeleting: (state) => state.isAlbumDeleting,
+    selectMusicTracksDeleting: (state) => state.isTracksDeleting,
+    selectMusicTracksPublishing: (state) => state.isTrackPublishing,
+    selectMusicAlbumsPublishing: (state) => state.isAlbumPublishing,
+    selectMusicArtistsPublishing: (state) => state.isArtistPublishing,
   },
 });
 
@@ -169,4 +274,11 @@ export const {
   selectMusicArtistsAlbumsFetching,
   selectMusicArtistsCreating,
   selectMusicAlbumsCreating,
+  selectMusicTracksCreating,
+  selectMusicArtistsDeleting,
+  selectMusicAlbumsDeleting,
+  selectMusicTracksDeleting,
+  selectMusicAlbumsPublishing,
+  selectMusicArtistsPublishing,
+  selectMusicTracksPublishing,
 } = musicSlice.selectors;

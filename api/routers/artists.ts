@@ -37,6 +37,12 @@ artistsRouter.get('/:id', async (req, res, next) => {
 
 artistsRouter.post('/', auth, imagesUpload.single('picture'), async (req, res, next) => {
   try {
+    const isBusy = Boolean(await Artist.findOne({ name: req.body.name }));
+
+    if (isBusy) {
+      return res.status(400).send({ error: 'Artist already exists' });
+    }
+
     const artistMutation: ArtistMutation = {
       name: req.body.name,
       picture: req.file ? req.file.filename : null,
