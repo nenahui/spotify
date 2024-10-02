@@ -62,6 +62,8 @@ export interface User {
   _id: string;
   username: string;
   token: string;
+  displayName?: string;
+  googleId?: string;
   role: 'admin' | 'user';
 }
 

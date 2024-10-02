@@ -50,6 +50,8 @@ const UserSchema = new Schema<UserFields, UserModel, UserMethods>({
     enum: ['admin', 'user'],
     default: 'user',
   },
+  displayName: String,
+  googleId: String,
 });
 
 UserSchema.pre('save', async function (next) {

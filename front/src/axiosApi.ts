@@ -1,9 +1,10 @@
 import type { RootState } from '@/app/store';
+import { API_URL } from '@/constants';
 import type { Store } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const axiosApi = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: API_URL,
 });
 
 export const addInterceptors = (store: Store<RootState>) => {

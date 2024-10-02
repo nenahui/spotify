@@ -8,8 +8,9 @@ import {
   selectRegisterError,
   selectRegisterLoading,
 } from '@/features/users/usersSlice';
-import { login, register } from '@/features/users/usersThunks';
+import { googleLogin, login, register } from '@/features/users/usersThunks';
 import type { RegisterMutation } from '@/types';
+import { type CredentialResponse, GoogleLogin } from '@react-oauth/google';
 import { Loader } from 'lucide-react';
 import React, { type HTMLAttributes, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -44,6 +45,13 @@ export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
     }
   }, [registerError, loginError, type]);
 
+  const googleLoginHandler = async (credentialResponse: CredentialResponse) => {
+    if (credentialResponse.credential) {
+      await dispatch(googleLogin(credentialResponse.credential)).unwrap();
+      navigate('/');
+    }
+  };
+
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
@@ -69,6 +77,12 @@ export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
           <Label htmlFor='password'>Password</Label>
           <Input id='password' type='password' value={state.password} onChange={onChange} required />
         </div>
+        <GoogleLogin
+          onSuccess={googleLoginHandler}
+          onError={() => {
+            console.error('Google login error');
+          }}
+        />
         <Button type='submit' disabled={isRegisterLoading || isLoginLoading}>
           {isRegisterLoading || isLoginLoading ? <Loader className='animate-spin' /> : 'Submit'}
         </Button>

@@ -34,7 +34,7 @@ export function Menu() {
           <MenubarContent forceMount>
             {user ? (
               <>
-                <MenubarLabel>{user.username}</MenubarLabel>
+                <MenubarLabel>{user.displayName ? user.displayName : user.username}</MenubarLabel>
                 <MenubarSeparator />
                 <MenubarItem onClick={handleLogout}>Logout</MenubarItem>
               </>
