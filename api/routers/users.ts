@@ -5,11 +5,12 @@ import mongoose from 'mongoose';
 import { randomUUID } from 'node:crypto';
 import { config } from '../config';
 import { User } from '../models/User';
+import { imagesUpload } from '../multer';
 
 export const usersRouter = express.Router();
 const googleClient = new OAuth2Client(config.google.clientId);
 
-usersRouter.post('/', async (req, res, next) => {
+usersRouter.post('/', imagesUpload.single('avatar'), async (req, res, next) => {
   try {
     const isBusy = await User.findOne({ username: req.body.username });
 
@@ -20,6 +21,8 @@ usersRouter.post('/', async (req, res, next) => {
     const user = new User({
       username: req.body.username,
       password: req.body.password,
+      avatar: req.file ? req.file.filename : null,
+      displayName: req.body.displayName,
       token: randomUUID(),
     });
     await user.save();
@@ -76,6 +79,7 @@ usersRouter.post('/google', async (req, res, next) => {
     const email = payload.email;
     const id = payload.sub;
     const displayName = payload.name;
+    const avatar = payload.picture;
 
     if (!email) {
       return res.status(400).send({ error: 'Not enough user data to continue' });
@@ -88,6 +92,7 @@ usersRouter.post('/google', async (req, res, next) => {
       user = new User({
         username: email,
         password: newPassword,
+        avatar: avatar ? avatar : null,
         googleId: id,
         displayName,
       });

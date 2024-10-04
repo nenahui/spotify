@@ -30,6 +30,8 @@ export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
   const [state, setState] = useState<RegisterMutation>({
     username: '',
     password: '',
+    displayName: '',
+    avatar: null,
   });
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +51,15 @@ export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
     if (credentialResponse.credential) {
       await dispatch(googleLogin(credentialResponse.credential)).unwrap();
       navigate('/');
+    }
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setState((prev) => ({ ...prev, avatar: file }));
+    } else {
+      setState((prev) => ({ ...prev, avatar: null }));
     }
   };
 
@@ -77,6 +88,20 @@ export const UserAuthForm: React.FC<Props> = ({ type, ...props }: Props) => {
           <Label htmlFor='password'>Password</Label>
           <Input id='password' type='password' value={state.password} onChange={onChange} required />
         </div>
+
+        {type === 'register' && (
+          <>
+            <div>
+              <Label htmlFor='displayName'>Display Name</Label>
+              <Input id='displayName' value={state.displayName} onChange={onChange} required />
+            </div>
+
+            <div>
+              <Label htmlFor='avatar'>Avatar</Label>
+              <Input type={'file'} id='avatar' onChange={handleImageChange} />
+            </div>
+          </>
+        )}
         <GoogleLogin
           onSuccess={googleLoginHandler}
           onError={() => {

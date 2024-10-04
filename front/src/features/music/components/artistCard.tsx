@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { Loader } from '@/components/loader';
 import { Badge } from '@/components/ui/badge';
+import { API_URL } from '@/constants';
 import { selectMusicArtistsDeleting, selectMusicArtistsPublishing } from '@/features/music/musicSlice';
 import { deleteArtist, fetchArtists, publishArtist } from '@/features/music/musicThunks';
 import { selectUser } from '@/features/users/usersSlice';
@@ -50,7 +51,7 @@ export const ArtistCard = ({
       <Link to={`/artists/${artist._id}`}>
         <div className='overflow-hidden rounded-md'>
           <img
-            src={`http://localhost:8000/${artist.picture}`}
+            src={`${API_URL}/${artist.picture}`}
             alt={artist.name}
             className={cn(
               'object-cover transition-all hover:scale-105',
